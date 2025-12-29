@@ -132,7 +132,7 @@ export default function Rooms(){
                 {rooms.map((room, index) => (
                     <Card key={index} className="bg-neutral-2 stroke-grey-0">
                         <CardHeader>
-                            <img src={`src/assets/lantai-${room.lantai}.jpg`} alt={`Ruang Lantai ${room.lantai}`} className="w-full h-40 object-cover rounded-t-lg" />
+                            <img src={`public/lantai-${room.lantai}.jpg`} alt={`Ruang Lantai ${room.lantai}`} className="w-full h-40 object-cover rounded-t-lg" />
                             <CardTitle>Ruang {room.nama_ruangan}</CardTitle>
                             <CardDescription>Lantai {room.lantai}</CardDescription>
                         </CardHeader>

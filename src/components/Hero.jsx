@@ -14,7 +14,7 @@ export default function Hero() {
         <img
           alt="Gedung Dewi Sartika"
           className="absolute h-full w-full top-0 left-0 object-cover"
-          src="src/assets/dewi-sartika.jpg"
+          src="public/dewi-sartika.jpg"
         />
       </div>
     </div>
