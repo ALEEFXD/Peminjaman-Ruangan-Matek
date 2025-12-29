@@ -1,0 +1,83 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+/* 1. Define your Design System values here */
+@layer base {
+  :root {
+    /* --- LIGHT MODE DEFAULTS --- */
+    --color-bg-neutral-0: #E5E5E5; /* Main Background */
+    --color-bg-neutral-1: #F2F2F2;
+    --color-bg-neutral-2: #FFFFFF;
+
+    --color-bg-orange-0: #8B2B99;
+    --color-bg-orange-1: #972FA6;
+    --color-bg-orange-2: #A232B2;
+
+    --color-fg-main: #000000;
+    --color-fg-grey-0: #B2B2B2;
+    
+    --color-fixed-white: #FFFFFF;
+    --color-fixed-black: #000000;
+  }
+
+  /* --- DARK MODE OVERRIDES --- */
+  /* This selector activates when the parent has class="dark" */
+  :root.dark {
+    --color-bg-neutral-0: #1A1A1A;
+    --color-bg-neutral-1: #262626;
+    --color-bg-neutral-2: #333333;
+
+    --color-bg-orange-0: #5D1D66;
+    --color-bg-orange-1: #692173;
+    --color-bg-orange-2: #8B2B99;
+
+    --color-fg-main: #FFFFFF;
+    --color-fg-grey-0: #4D4D4D;
+    
+    /* Fixed colors usually don't change, but good to keep consistent */
+    --color-fixed-white: #FFFFFF;
+    --color-fixed-black: #000000;
+  }
+}
+
+/* 2. Map them to Tailwind Utilities */
+/* In v4, we use @theme to tell Tailwind about our custom variables */
+@theme{
+  /* This creates classes like 'bg-neutral-0', 'text-neutral-0', 'border-neutral-0' */
+  --color-neutral-0: var(--color-bg-neutral-0);
+  --color-neutral-1: var(--color-bg-neutral-1);
+  --color-neutral-2: var(--color-bg-neutral-2);
+
+  --color-orange-0: var(--color-bg-orange-0);
+  --color-orange-1: var(--color-bg-orange-1);
+  --color-orange-2: var(--color-bg-orange-2);
+
+  --color-main: var(--color-fg-main);
+  --color-grey-0: var(--color-fg-grey-0);
+  
+  --color-fixed-white: var(--color-fixed-white);
+  --color-fixed-black: var(--color-fixed-black);
+
+  /* Set Plus Jakarta Sans as the default sans font */
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+}
+
+/* 3. Additional custom styles */
+h1, h2, h3, h4, h5, h6, p, span, div, a, li, button {
+  line-height: 1.15;
+}
+
+h1{
+  font-size: 80px;
+  font-weight: bold;
+}
+
+h3{
+  font-size: 24px;
+  font-weight: bold;
+}
+
+p, li{
+  font-size: 20px;
+  font-weight: regular;
+}
