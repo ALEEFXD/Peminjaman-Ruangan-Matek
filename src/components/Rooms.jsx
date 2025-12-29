@@ -137,7 +137,7 @@ export default function Rooms(){
                     floor={room.lantai}
                     capacity={room.kapasitas}
                     facilities={room.fasilitas}
-                    imgDir={`public/lantai-${room.lantai}.jpg`} />
+                    imgDir={`/lantai-${room.lantai}.jpg`} />
                 ))}
             </div>
         </div>

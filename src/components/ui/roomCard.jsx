@@ -11,7 +11,7 @@ export default function RoomCard({ imgDir, roomName, floor, capacity, facilities
     const facilitiesList = parseFacilities(facilities);
 
     return(
-        <div className="bg-neutral-1 stroke-grey-0 rounded-[20px] p-[10px] gap-[10px] flex flex-col h-fit w-full">
+        <div className="bg-neutral-1 border border-grey-0 rounded-[20px] p-[10px] gap-[10px] flex flex-col h-fit w-full">
             <img src={imgDir} alt={`Ruang ${roomName}`} className="w-full h-40 object-cover rounded-[10px]" />
             <div className="gap-[5px] flex flex-col">
                 <h3 className="text-xl font-bold">Ruang {roomName}</h3>
@@ -24,7 +24,7 @@ export default function RoomCard({ imgDir, roomName, floor, capacity, facilities
 
                     ))}
                 </div>
-                <Button className="w-fit" size="icon" variant="destructive"><ClockPlus /></Button>
+                <Button className="w-fit bg-transparent" variant="outline"><ClockPlus/> Order</Button>
             </div>
         </div>
     )

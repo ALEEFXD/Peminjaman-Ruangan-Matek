@@ -1,3 +1,5 @@
+import Button from "@/components/ui/button.jsx";
+
 export default function Alur(){
     return(
         <div className="w-full h-fit p-20 flex flex-col text-main bg-neutral-0 rounded-t-[80px] ">
