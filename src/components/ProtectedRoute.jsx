@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRouteSiswa = ({ children }) => {
 
     const { user, loginStudent, loginAdmin, logout, loading, error } = useAuth();
     if (loading) {
@@ -15,9 +15,10 @@ const ProtectedRoute = ({ children }) => {
     if (user.role == 'student') {
 
         return children ? children : <Outlet />;
+        
     }
 
     return <Navigate to="/login" replace />;
 }
 
-export default ProtectedRoute;
+export default ProtectedRouteSiswa;

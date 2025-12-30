@@ -16,7 +16,7 @@ export default async function addPeminjaman(nimPeminjam, namaRuangan, tanggal, j
                 jam_selesai: jamSelesai,
                 mata_kuliah: keperluan,
                 status: 'pending',
-                waktu_pengajuan: new Date().toISOString()
+                waktu_pengajuan: new Date().toISOString(),
             }
         ])
         .select();

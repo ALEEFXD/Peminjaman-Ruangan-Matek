@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Badge from "@/components/ui/badge.jsx";
 import Button from "@/components/ui/button.jsx";
 import { Users, Layers, ClockPlus } from 'lucide-react';
@@ -12,6 +13,8 @@ import {
 import RoomField from "@/components/ui/roomField";
 
 export default function RoomCard({ imgDir, roomName, floor, capacity, facilities }) {
+    const [isOpen, setIsOpen] = useState(false);
+
     const parseFacilities = (text) => {
         if (typeof text !== 'string') return [];
         return text.split(',').map((item) => item.trim());
@@ -34,12 +37,12 @@ export default function RoomCard({ imgDir, roomName, floor, capacity, facilities
                     ))}
                 </div>
 
-                <Dialog className="w-[100vw]">
-                    <DialogTrigger>
+                <Dialog className="w-[100vw]" open={isOpen} onOpenChange={setIsOpen}>
+                    <DialogTrigger asChild>
                         <Button className="w-full" variant="secondary"><ClockPlus/></Button>
                     </DialogTrigger>
                     <DialogContent className="">
-                        <RoomField roomName={roomName} />
+                        <RoomField roomName={roomName} onSuccess={() => setIsOpen(false)} />
                     </DialogContent>
                 </Dialog>
             </div>

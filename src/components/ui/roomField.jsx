@@ -19,6 +19,9 @@ import {
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import checkPeminjamanHours from "../../utils/checkPeminjamanHours"
+import { useAuth } from "../AuthProvider"
+import addPeminjaman from "../../utils/addPeminjaman"
+import supabase from "../../api/supabase-client"
 
 const timeSlots = [
     { jam_mulai: "08:00:00", jam_selesai: "09:00:00" },
@@ -31,13 +34,17 @@ const timeSlots = [
     { jam_mulai: "15:00:00", jam_selesai: "16:00:00" },
 ]
 
-export default function RoomField({ roomName }) {
+export default function RoomField({ roomName, onSuccess }) {
 
     
     const [open, setOpen] = useState(false)
     const [date, setDate] = useState()
     const [selectedSlots, setSelectedSlots] = useState([])
     const [occupiedSlots, setOccupiedSlots] = useState([])
+    const { user } = useAuth()
+    const [keperluan, setKeperluan] = useState("")
+    const [file, setFile] = useState(null)
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     useEffect(() => {
         setOccupiedSlots([])
@@ -64,8 +71,61 @@ export default function RoomField({ roomName }) {
         fetchOccupied()
     }, [date, roomName])
 
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        if (!user) {
+            alert("Anda harus login untuk melakukan peminjaman.")
+            return
+        }
+        
+        setIsSubmitting(true)
+        
+        const year = date.getFullYear()
+        const month = String(date.getMonth() + 1).padStart(2, '0')
+        const day = String(date.getDate()).padStart(2, '0')
+        const formattedDate = `${year}-${month}-${day}`
+
+        const jamMulai = selectedSlots[0].jam_mulai
+        const jamSelesai = selectedSlots[selectedSlots.length - 1].jam_selesai
+        const nimPeminjam = user.nim || user.id
+
+        // Rename file: time_date_firstWord
+        const timeStr = jamMulai.replace(/:/g, "-")
+        const firstWord = keperluan.trim().split(" ")[0]
+        const fileExt = file.name.split('.').pop()
+        const newFileName = `${nimPeminjam}_${firstWord}_${timeStr}_${formattedDate}.${fileExt}`
+
+        // Upload to Supabase Storage (bucket: spermohonan, path: public/)
+        const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('spermohonan')
+            .upload(`${nimPeminjam}/${newFileName}`, file, {
+                cacheControl: '3600',
+                upsert: false
+            })
+
+        if(uploadData) {console.log("File uploaded:", uploadData)}
+        if (uploadError) {
+            console.error("Upload error:", uploadError)
+            alert("Gagal mengunggah surat permohonan.")
+            setIsSubmitting(false)
+            return
+        }
+        else{console.log("No upload error")}
+
+        const result = await addPeminjaman(nimPeminjam, roomName, formattedDate, jamMulai, jamSelesai, keperluan)
+        
+        if (result) {
+            alert("Peminjaman berhasil diajukan!")
+            if (onSuccess) onSuccess()
+        }
+        else alert("Gagal mengajukan peminjaman.")
+        
+        setIsSubmitting(false)
+    }
+
   return (
-    <FieldGroup className="w-full max-w-md">
+    <form onSubmit={handleSubmit} className="w-full max-w-md">
+    <FieldGroup className="w-full">
         <FieldSet>
         <FieldLegend>Pengajuan Peminjaman</FieldLegend>
         <FieldDescription>
@@ -110,11 +170,10 @@ export default function RoomField({ roomName }) {
             <FieldLabel htmlFor="time-pmjrngn">
                 Waktu Peminjaman
             </FieldLabel>
-            <div id="time-pmjrngn" className="grid grid-cols-4  gap-2">
+            <div id="time-pmjrngn" className="grid grid-cols-4  gap-2" required>
                 {timeSlots.map((slot, index) => (
                     <div key={index} className="relative min-w-fit">
                         <input
-                            required
                             type="checkbox"
                             id={`slot-${index}`}
                             className="peer sr-only"
@@ -161,6 +220,7 @@ export default function RoomField({ roomName }) {
                   onChange={(e) => {
                     const file = e.target.files[0]
                     if (file) {
+                        setFile(file)
                         if (file.size > 10 * 1024 * 1024) {
                             alert("File size exceeds 10MB")
                             e.target.value = ""
@@ -183,14 +243,19 @@ export default function RoomField({ roomName }) {
                   id="perm-pmjrngn"
                   placeholder="Mata Kuliah Statistika"
                   required
+                  value={keperluan}
+                  onChange={(e) => setKeperluan(e.target.value)}
                 />
             </Field>
         </FieldGroup>
         </FieldSet>
         <FieldSeparator />
         <Field orientation="horizontal">
-        <Button type="submit" variant="secondary">Submit</Button>
+        <Button type="submit" variant="secondary" disabled={isSubmitting}>
+            {isSubmitting ? "Submitting..." : "Submit"}
+        </Button>
         </Field>
     </FieldGroup>
+    </form>
   )
 }

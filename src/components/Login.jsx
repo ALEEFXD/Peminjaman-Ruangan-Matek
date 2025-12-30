@@ -38,9 +38,6 @@ export default function Login() {
         <div className="min-h-screen bg-neutral-1 flex items-center justify-center p-4 font-sans text-main">
             <div className="max-w-md w-full flex flex-col gap-8">
                 <div className="text-center flex flex-col items-center gap-4">
-                    <div className="bg-orange-2 w-16 h-16 rounded-[20px] flex items-center justify-center shadow-lg">
-                        <BookOpen className="text-fixed-white w-8 h-8" />
-                    </div>
                     <div>
                         <h1 className="text-3xl font-bold text-main">Sistem Peminjaman</h1>
                         <p className="text-grey-0 mt-2">Masuk untuk mengakses layanan</p>

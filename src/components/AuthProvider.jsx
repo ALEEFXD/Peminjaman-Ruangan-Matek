@@ -60,8 +60,8 @@ export const AuthProvider = ({ children }) => {
                 throw new Error('Password salah. (Format: NamaDepan + NIM)');
             }
 
-            setUser({ ...userData, role: 'student' });
-            console.log("Login successful for student:", userData);
+            setUser({ ...userData, role: 'student', id: userData.nim});
+            console.log("Login successful for student:", userData.nim);
             return true;
             
         } catch (err) {
@@ -95,7 +95,8 @@ export const AuthProvider = ({ children }) => {
                 throw new Error('Password admin salah.');
             }
 
-            setUser({ ...adminData, role: 'admin' });
+            setUser({ ...adminData, role: 'admin', id: adminData.id_admin });
+            console.log("Login successful for admin:", adminData.id_admin);
             return true;
         } catch (err) {
             setError(err.message);
