@@ -9,6 +9,11 @@ export const AuthProvider = ({ children }) => {
     const [error, setError] = useState(null);
 
     const loginStudent = async (nim, password) => {
+        if (!supabase) {
+            setError("Konfigurasi server belum lengkap (Missing Supabase URL/Key).");
+            return false;
+        }
+
         setLoading(true);
         setError(null);
         try {
@@ -42,6 +47,11 @@ export const AuthProvider = ({ children }) => {
     };
 
     const loginAdmin = async (username, password) => {
+        if (!supabase) {
+            setError("Konfigurasi server belum lengkap (Missing Supabase URL/Key).");
+            return false;
+        }
+
         setLoading(true);
         setError(null);
         try {
