@@ -134,10 +134,10 @@ export function PengajuanTable() {
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter mata kuliah..."
-          value={(table.getColumn("mata_kuliah")?.getFilterValue()) ?? ""}
+          placeholder="Filter ruangan..."
+          value={(table.getColumn("nama_ruangan")?.getFilterValue()) ?? ""}
           onChange={(event) =>
-            table.getColumn("mata_kuliah")?.setFilterValue(event.target.value)
+            table.getColumn("nama_ruangan")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
