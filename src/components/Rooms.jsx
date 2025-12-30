@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import RoomCard from "./ui/roomCard.jsx";
 import getRooms from "@/utils/getRooms.js";
@@ -6,10 +6,18 @@ import getRooms from "@/utils/getRooms.js";
 
 export default function Rooms(){
     const [rooms, setRooms] = useState([]);
-    useState(async () => {
-        const fetchedRooms = await getRooms();
-        setRooms(fetchedRooms);
-    });
+    
+    useEffect(() => {
+        const fetchRooms = async () => {
+            try {
+                const fetchedRooms = await getRooms();
+                if (fetchedRooms) setRooms(fetchedRooms);
+            } catch (error) {
+                console.error("Failed to fetch rooms:", error);
+            }
+        };
+        fetchRooms();
+    }, []);
 
 
     return(

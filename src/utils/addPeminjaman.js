@@ -1,6 +1,10 @@
 import supabase from "../api/supabase-client.js";
 
 export default async function addPeminjaman(nimPeminjam, namaRuangan, tanggal, jamMulai, jamSelesai, keperluan) {
+    if (!supabase) {
+        console.error("Supabase client not initialized");
+        return null;
+    }
     const { data, error } = await supabase
         .from('peminjaman')
         .insert([
