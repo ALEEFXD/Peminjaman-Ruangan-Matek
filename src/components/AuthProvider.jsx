@@ -1,12 +1,38 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import supabase from "../api/supabase-client";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    useEffect(() => {
+        if (!supabase) {
+            setLoading(false);
+            return;
+        }
+
+        const setData = async () => {
+            const { data: { session }, error } = await supabase.auth.getSession();
+            if (!error && session) {
+                setUser({ ...session.user, role: 'student' });
+            }
+            setLoading(false);
+        };
+
+        const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session ? { ...session.user, role: 'student' } : null);
+            setLoading(false);
+        });
+
+        setData();
+
+        return () => {
+            listener.subscription.unsubscribe();
+        };
+    }, []);
 
     const loginStudent = async (nim, password) => {
         if (!supabase) {
